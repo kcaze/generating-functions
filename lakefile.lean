@@ -13,5 +13,3 @@ lean_exe «generating-functions» where
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
-require Paperproof from git
-  "https://github.com/Paper-Proof/paperproof.git"@"main"/"lean"
