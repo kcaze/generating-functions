@@ -21,6 +21,16 @@ lemma smul_mul_eq_mul_smul (P: k⟦X⟧) (Q: k⟦X⟧) (c: k)
     : c • P * Q = P * c • Q := by
   simp
 
+lemma C_add_C (a: k) (b: k): (C k) a + (C k) b = (C k) (a+b) := by
+  simp
+
+lemma C_sub_C (a: k) (b: k): (C k) a - (C k) b = (C k) (a-b) := by
+  simp
+
+lemma inv_of_mul (P: k⟦X⟧) (Q: k⟦X⟧) : (P*Q)⁻¹ = P⁻¹*Q⁻¹ := by
+  simp
+  ring
+
 lemma eq_mulX_divX (P: k⟦X⟧) (h: constantCoeff k P = 0) : P = X*(divX P h) := by
   unfold divX
   exact Exists.choose_spec (exists_eq_mul_right_of_dvd (X_dvd_iff.mpr h))
