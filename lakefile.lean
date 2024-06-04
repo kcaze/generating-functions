@@ -13,3 +13,5 @@ lean_exe «generating-functions» where
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4"
+
+require LatexInLean from git "https://github.com/kcaze/LatexInLean.git"@"main"

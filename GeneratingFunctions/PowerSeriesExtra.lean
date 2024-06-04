@@ -1,14 +1,22 @@
-import Mathlib
+-- import Mathlib
+import LatexInLean
+import Mathlib.RingTheory.Henselian
+import Mathlib.RingTheory.HopfAlgebra
+import Mathlib.Algebra.Lie.OfAssociative
+import Mathlib.RingTheory.PowerSeries.Inverse
+
+
+show_panel_widgets [latex]
 
 section
 open PowerSeries
 
 variable {k : Type*} [Field k]
-
+/-! Define $\large\frac{P(x)}{x}$ as the $\large Q(x)$ that satisfies $\large Q(x) \cdot x = P(x)$.-/
 noncomputable def divX (P: k⟦X⟧) (h: constantCoeff k P = 0) : k⟦X⟧ :=
   (exists_eq_mul_right_of_dvd (X_dvd_iff.mpr h)).choose
 
-/- `geometricSeries r` = $\sum_{n \ge 0} r^nx^n$ -/
+/-! Define geometricSeries r as $\large\displaystyle\sum_{n \ge 0} r^nx^n$. -/
 def geometricSeries {k: Type u} [Field k] (r : k) : PowerSeries k :=
   mk fun n => r^n
 
@@ -39,9 +47,12 @@ lemma coeff_divX (P: k⟦X⟧) (h: constantCoeff k P = 0) (n: ℕ)
     : (coeff k n (divX P h)) = coeff k (n+1) P := by
   simp [eq_mulX_divX P h]
 
-/- $\sum_{n \ge 0} (a \cdot r^n)x^n = \frac{a}{1-rx}$ -/
+/-! Show that $\displaystyle\large\sum_{n \ge 0}  r^nx^n = \frac{1}{1-rx}$. -/
 lemma geometricSeries_eq_closed_form {k: Type u} [Field k] (r: k)
   : geometricSeries r = (1 - r•X)⁻¹ := by
+
+  /-# This is an latex comment $\sum_{i=0}$. -/ -> latex "This is an latex comment $\sum_{i=0}$" -> give some information for our plugin to read and render
+
   suffices h : (geometricSeries r) * (1-r•X) = 1 by
     have h' : constantCoeff k (1-r•X) ≠ 0 := by simp
     exact (eq_inv_iff_mul_eq_one h').mpr h
