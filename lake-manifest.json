@@ -67,7 +67,7 @@
   {"url": "https://github.com/kcaze/LatexInLean.git",
    "type": "git",
    "subDir": null,
-   "rev": "c2eee612954823a8c15e0c882ebc32013c7a7d03",
+   "rev": "fca6e71f2c432f0e23701f296a1312a72ee761e7",
    "name": "LatexInLean",
    "manifestFile": "lake-manifest.json",
    "inputRev": "main",

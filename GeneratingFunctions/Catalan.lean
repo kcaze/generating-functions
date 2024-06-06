@@ -41,13 +41,19 @@ noncomputable instance Real.instBinomialRing : BinomialRing ℝ where
     }
 
 
--- open PowerSeries
+open PowerSeries
+/-! Generating function for $\displaystyle\large (1+rx)^\alpha \coloneqq \sum_{n \ge 0} \binom{\alpha}{n}r^nx^n$.-/
+noncomputable def BinomialSeries (r:ℝ) (α:ℝ) := mk (fun n => r^n * (Ring.choose α n))
+
+/-! Proof that for $\large n \in \mathbb{N}$, we have $\displaystyle \large \left(\sum_{n \ge 0} \binom{1/n}{n}r^nx^n\right)^n = 1+rx$.-/
+theorem BinomialSeries_pow (r: ℝ) (n: ℕ) : (BinomialSeries r (1/n))^n = 1 + r•X := by
+  sorry
+
+
+
+
 -- /-! Catalan generating function $\displaystyle\large C(x) \coloneqq \sum_{n \ge 0} c_n$. -/
 -- def C : ℝ⟦X⟧ := PowerSeries.mk (fun n => ↑(catalan n))
 
--- /-! Generating function for $\displaystyle\large (1+rx)^\alpha \coloneqq \sum_{n \ge 0} \binom{\alpha}{n}r^nx^n$.-/
--- def BinomialSeries (r:ℝ) (α:ℝ) := mk (fun n => Ring.choose α n)
-
--- /-! Proof that for $\large n \in \mathbb{N}$, we have $\displaystyle \large \left(\sum_{n \ge 0} \binom{1/n}{n}r^nx^n\right)^n = 1+rx$.-/
 
 -- theorem C =
