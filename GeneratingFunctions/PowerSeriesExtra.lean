@@ -50,9 +50,9 @@ lemma coeff_divX (P: k⟦X⟧) (h: constantCoeff k P = 0) (n: ℕ)
 /-! Show that $\displaystyle\large\sum_{n \ge 0}  r^nx^n = \frac{1}{1-rx}$. -/
 lemma geometricSeries_eq_closed_form {k: Type u} [Field k] (r: k)
   : geometricSeries r = (1 - r•X)⁻¹ := by
+  /-sorry-/
 
-  /-# This is an latex comment $\sum_{i=0}$. -/ -> latex "This is an latex comment $\sum_{i=0}$" -> give some information for our plugin to read and render
-
+  /-# This is an latex comment $\sum_{i=0}$. -/
   suffices h : (geometricSeries r) * (1-r•X) = 1 by
     have h' : constantCoeff k (1-r•X) ≠ 0 := by simp
     exact (eq_inv_iff_mul_eq_one h').mpr h
