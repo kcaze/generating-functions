@@ -48,8 +48,42 @@ theorem A_generating_function : A = X * (1-(1:ℝ)•X)⁻¹ * (1-(2:ℝ)•X)�
        _ = (1-(2:ℝ)•X)⁻¹ * X * (1-(1:ℝ)•X)⁻¹ := by rw [mul_assoc, this, ← mul_assoc]
         _ = X * (1-(1:ℝ)•X)⁻¹ * (1-(2:ℝ)•X)⁻¹ := by ring
 
-theorem partial_fraction_expansion : (1-(1:ℝ)•(X:ℝ⟦X⟧))⁻¹ * (1-(2:ℝ)•X)⁻¹ = 2 • (1-(2:ℝ)•X)⁻¹ - (1-(1:ℝ)•X)⁻¹ := by
-  sorry
+theorem partial_fraction_expansion : (1-(1:ℝ)•(X:ℝ⟦X⟧))⁻¹ * (1-(2:ℝ)•X)⁻¹ = (2:ℝ) • (1-(2:ℝ)•X)⁻¹ - (1-(1:ℝ)•X)⁻¹ := by
+  apply Eq.symm
+
+  let P : ℝ⟦X⟧ := 1-(1:ℝ)•(X:ℝ⟦X⟧)
+  let Q : ℝ⟦X⟧ := 1-(2:ℝ)•X
+
+  have hP : constantCoeff ℝ P ≠ 0 := by
+    unfold_let P
+    simp
+  have hQ : constantCoeff ℝ Q ≠ 0 := by
+    unfold_let Q
+    simp
+
+  have h₁_common_denom : (2:ℝ) • Q⁻¹ = ((2:ℝ) • P) * (P⁻¹ * Q⁻¹) := by
+    rw [smul_mul_assoc, ← mul_assoc]
+    simp [hP]
+
+  have h₂_common_denom : P⁻¹ = Q * (P⁻¹ * Q⁻¹) := by
+    rw [mul_comm, mul_assoc]
+    simp [hQ]
+
+  have h_numerator : (2:ℝ) • P - Q = (1:ℝ⟦X⟧) := by
+    unfold_let P Q
+    rw [one_smul, smul_sub]
+    simp
+    apply ext
+    intro n
+    match n with
+    | 0 => simp; ring
+    | m+1 => simp
+
+  calc (2:ℝ) • Q⁻¹ - P⁻¹ = ((2:ℝ) • P) * (P⁻¹ * Q⁻¹) - Q * (P⁻¹ * Q⁻¹) := by
+                                                                             nth_rw 1 [h₁_common_denom]
+                                                                             nth_rw 2 [h₂_common_denom]
+                       _ = ((2:ℝ) • P - Q) * (P⁻¹ * Q⁻¹) := by rw [←mul_sub_right_distrib]
+                       _ = P⁻¹ * Q⁻¹ := by simp [h_numerator]
 
 theorem a_formula : a n = 2^n - 1 := by
   set P : ℝ⟦X⟧ := 2 • (1-(2:ℝ)•X)⁻¹ with hP
