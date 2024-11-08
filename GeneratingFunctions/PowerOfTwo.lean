@@ -54,12 +54,8 @@ theorem partial_fraction_expansion : (1-(1:ℝ)•(X:ℝ⟦X⟧))⁻¹ * (1-(2:�
   let P : ℝ⟦X⟧ := 1-(1:ℝ)•(X:ℝ⟦X⟧)
   let Q : ℝ⟦X⟧ := 1-(2:ℝ)•X
 
-  have hP : constantCoeff ℝ P ≠ 0 := by
-    unfold_let P
-    simp
-  have hQ : constantCoeff ℝ Q ≠ 0 := by
-    unfold_let Q
-    simp
+  have hP : constantCoeff ℝ P ≠ 0 := by simp [P]
+  have hQ : constantCoeff ℝ Q ≠ 0 := by simp [Q]
 
   have h₁_common_denom : (2:ℝ) • Q⁻¹ = ((2:ℝ) • P) * (P⁻¹ * Q⁻¹) := by
     rw [smul_mul_assoc, ← mul_assoc]
