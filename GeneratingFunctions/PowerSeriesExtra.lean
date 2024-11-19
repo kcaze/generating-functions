@@ -16,11 +16,6 @@ noncomputable def divX (P: k⟦X⟧) (h: constantCoeff k P = 0) : k⟦X⟧ :=
 def geometricSeries {k: Type u} [Field k] (r : k) : PowerSeries k :=
   mk fun n => r^n
 
-@[simp]
-theorem PowerSeries.constantCoeff_mk (f : ℕ → k) : (constantCoeff k) (mk f) = f 0 := by
-  rw [← coeff_zero_eq_constantCoeff]
-  exact (coeff_mk 0 f)
-
 lemma smul_mul_eq_mul_smul (P: k⟦X⟧) (Q: k⟦X⟧) (c: k)
     : c • P * Q = P * c • Q := by
   simp
