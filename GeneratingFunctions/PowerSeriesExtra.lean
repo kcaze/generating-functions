@@ -1,12 +1,8 @@
 -- import Mathlib
-import LatexInLean
 import Mathlib.RingTheory.Henselian
 import Mathlib.RingTheory.HopfAlgebra
 import Mathlib.Algebra.Lie.OfAssociative
 import Mathlib.RingTheory.PowerSeries.Inverse
-
-
-show_panel_widgets [latex]
 
 section
 open PowerSeries

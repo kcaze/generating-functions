@@ -1,7 +1,4 @@
-import LatexInLean
 import Mathlib
-
-show_panel_widgets [latex]
 
 /-! Goal: Show that $\large\displaystyle\sum_{n \ge 0} c_nx^n = \frac{1-\sqrt{1-4x}}{2x}$,
     where $c_n$ is the $n$-th Catalan number.-/
