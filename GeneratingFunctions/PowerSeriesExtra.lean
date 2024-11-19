@@ -1,7 +1,3 @@
--- import Mathlib
-import Mathlib.RingTheory.Henselian
-import Mathlib.RingTheory.HopfAlgebra
-import Mathlib.Algebra.Lie.OfAssociative
 import Mathlib.RingTheory.PowerSeries.Inverse
 
 section
@@ -18,17 +14,17 @@ def geometricSeries {k: Type u} [Field k] (r : k) : PowerSeries k :=
 
 lemma smul_mul_eq_mul_smul (P: k⟦X⟧) (Q: k⟦X⟧) (c: k)
     : c • P * Q = P * c • Q := by
-  simp
+  simp only [Algebra.smul_mul_assoc, Algebra.mul_smul_comm]
 
 lemma C_add_C (a: k) (b: k): (C k) a + (C k) b = (C k) (a+b) := by
-  simp
+  exact Eq.symm (RingHom.map_add (C k) a b)
 
 lemma C_sub_C (a: k) (b: k): (C k) a - (C k) b = (C k) (a-b) := by
-  simp
+  exact Eq.symm (RingHom.map_sub (C k) a b)
 
 lemma inv_of_mul (P: k⟦X⟧) (Q: k⟦X⟧) : (P*Q)⁻¹ = P⁻¹*Q⁻¹ := by
-  simp
-  ring
+  rw [MvPowerSeries.mul_inv_rev]
+  ring_nf
 
 lemma eq_mulX_divX (P: k⟦X⟧) (h: constantCoeff k P = 0) : P = X*(divX P h) := by
   unfold divX
@@ -36,7 +32,7 @@ lemma eq_mulX_divX (P: k⟦X⟧) (h: constantCoeff k P = 0) : P = X*(divX P h) :
 
 lemma coeff_divX (P: k⟦X⟧) (h: constantCoeff k P = 0) (n: ℕ)
     : (coeff k n (divX P h)) = coeff k (n+1) P := by
-  simp [eq_mulX_divX P h]
+  simp only [eq_mulX_divX P h, coeff_succ_X_mul]
 
 /-! Show that $\displaystyle\large\sum_{n \ge 0}  r^nx^n = \frac{1}{1-rx}$. -/
 lemma geometricSeries_eq_closed_form {k: Type u} [Field k] (r: k)
@@ -49,9 +45,11 @@ lemma geometricSeries_eq_closed_form {k: Type u} [Field k] (r: k)
     exact (eq_inv_iff_mul_eq_one h').mpr h
   ext n
   cases n with
-  | zero => simp [geometricSeries]
+  | zero => simp only [geometricSeries, coeff_zero_eq_constantCoeff, map_mul, constantCoeff_mk,
+    pow_zero, map_sub, constantCoeff_one, constantCoeff_smul, constantCoeff_X, smul_eq_mul,
+    mul_zero, sub_zero, mul_one, coeff_one, ↓reduceIte]
   | succ n => {
     rw [mul_sub_left_distrib]
     suffices h : r ^ (n + 1) - r * r ^ n = 0 by simp [geometricSeries, h]
-    ring
+    ring_nf
   }

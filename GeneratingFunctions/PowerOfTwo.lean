@@ -1,4 +1,4 @@
-import Mathlib
+import Mathlib.Data.Real.Basic
 import GeneratingFunctions.PowerSeriesExtra
 
 section
@@ -9,6 +9,8 @@ variable (A : ℝ⟦X⟧)
 variable (ha_base_case : a 0 = 0)
 variable (ha_recursion : ∀ n, a (n+1) = 2*(a n) + 1)
 variable (A_def : A = mk a)
+
+include a A_def ha_base_case ha_recursion A_def
 
 theorem A_generating_function : A = X * (1-(1:ℝ)•X)⁻¹ * (1-(2:ℝ)•X)⁻¹ := by
   have constantCoeff_A_eq_zero : constantCoeff ℝ A = 0 := by
@@ -66,7 +68,7 @@ theorem partial_fraction_expansion : (1-(1:ℝ)•(X:ℝ⟦X⟧))⁻¹ * (1-(2:�
     simp [hQ]
 
   have h_numerator : (2:ℝ) • P - Q = (1:ℝ⟦X⟧) := by
-    unfold_let P Q
+    unfold P Q
     rw [one_smul, smul_sub]
     simp
     apply ext
@@ -76,29 +78,33 @@ theorem partial_fraction_expansion : (1-(1:ℝ)•(X:ℝ⟦X⟧))⁻¹ * (1-(2:�
     | m+1 => simp
 
   calc (2:ℝ) • Q⁻¹ - P⁻¹ = ((2:ℝ) • P) * (P⁻¹ * Q⁻¹) - Q * (P⁻¹ * Q⁻¹) := by
-                                                                             nth_rw 1 [h₁_common_denom]
-                                                                             nth_rw 2 [h₂_common_denom]
+                            nth_rw 1 [h₁_common_denom]
+                            nth_rw 2 [h₂_common_denom]
                        _ = ((2:ℝ) • P - Q) * (P⁻¹ * Q⁻¹) := by rw [←mul_sub_right_distrib]
                        _ = P⁻¹ * Q⁻¹ := by simp [h_numerator]
 
 theorem a_formula : a n = 2^n - 1 := by
-  set P : ℝ⟦X⟧ := 2 • (1-(2:ℝ)•X)⁻¹ with hP
-  set Q : ℝ⟦X⟧ := (1-(1:ℝ)•X)⁻¹ with hQ
+  let P : ℝ⟦X⟧ := (2:ℝ) • (1-(2:ℝ)•X)⁻¹
+  let Q : ℝ⟦X⟧ := (1-(1:ℝ)•X)⁻¹
 
   cases n with
   | zero => simp [ha_base_case]
   | succ n => {
     have hA_partial_fraction : A = (X * (P-Q)) := by
+      unfold P Q
       rw [A_generating_function a A ha_base_case ha_recursion A_def]
-      rw [mul_assoc, partial_fraction_expansion]
+      rw [mul_assoc, partial_fraction_expansion a A ha_base_case ha_recursion A_def]
 
     have hP_coeff : (coeff ℝ) n P = 2^(n+1) := by
-      rw [hP, ← geometricSeries_eq_closed_form 2]
+      unfold P
+      rw [← geometricSeries_eq_closed_form 2]
       rw [coeff_smul, geometricSeries, coeff_mk]
-      ring
+      rw [smul_eq_mul]
+      ring_nf
 
     have hQ_coeff : (coeff ℝ) n Q = 1 := by
-      rw [hQ, ← geometricSeries_eq_closed_form 1, geometricSeries, coeff_mk]
+      unfold Q
+      rw [← geometricSeries_eq_closed_form 1, geometricSeries, coeff_mk]
       ring
 
     calc a (n+1) = (coeff ℝ) (n+1) A := by simp [A_def]
